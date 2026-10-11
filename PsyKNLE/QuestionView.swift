@@ -482,11 +482,12 @@ struct QuestionView: View {
                         Button {
                             showTopicBrowser = true
                         } label: {
+                            let isFiltered = selectedTopic != StudyTopics.all
                             HStack(spacing: 6) {
                                 Image(systemName: "square.stack.3d.up.fill")
                                 Text("주제별")
                                     .fontWeight(.semibold)
-                                if selectedTopic != StudyTopics.all {
+                                if isFiltered {
                                     Text("·")
                                     Text(selectedTopic)
                                         .lineLimit(1)
@@ -571,7 +572,7 @@ struct QuestionView: View {
             if examOrResult {
                 DetailView(question: question, presentInspector: $presentInspector)
             } else {
-                List { ResultView(question: question, stared: $stared, sequenceOfProblem: 1) }
+                List { ResultView(question: question, sequenceOfProblem: 1) }
             }
         }
         .animation(.default, value:allQuestions )
