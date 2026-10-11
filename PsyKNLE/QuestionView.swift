@@ -30,12 +30,10 @@ struct QuestionView: View {
     @AppStorage("pendingTopicJump") private var pendingTopicJump: String = ""
     @State private var isStaredOn: Bool = false
     @State private var hasMemoFilter: Bool = false
-    @State private  var  stared: Bool = false
     @State private var presentInspector: Bool = false
     /// 바꾸면 NavigationStack을 새로 만들어 쌓인 화면을 모두 닫고 목록(처음 화면)으로 돌아간다.
     @State private var navigationResetID = UUID()
     @State var examOrResult : Bool  = true
-    @State var visibility: NavigationSplitViewVisibility = .all
     @State var expanded : Bool = false
     @State private var inspectorSheetDetent: PresentationDetent = {
         UIDevice.current.userInterfaceIdiom == .pad ? .fraction(0.9) : .large
@@ -46,24 +44,6 @@ struct QuestionView: View {
     
     
     
-    init() {
-        
-        
-        //This changes the "thumb" that selects between items…
-        UISegmentedControl.appearance().selectedSegmentTintColor = .blue
-        
-        //This changes the color for the whole "bar" background
-        // UISegmentedControl.appearance().backgroundColor = .gray
-        
-        
-        //This will change the font size
-        UISegmentedControl.appearance().setTitleTextAttributes([.font : UIFont.preferredFont(forTextStyle: .body)], for: .highlighted)
-        UISegmentedControl.appearance().setTitleTextAttributes([.font : UIFont.preferredFont(forTextStyle: .body)], for: .normal)
-        
-        //these lines change the text color for various states
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.yellow], for: .highlighted)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.yellow], for: .selected)
-    }
     
     
     
@@ -194,34 +174,6 @@ struct QuestionView: View {
         }
     }
 
-    func deviceOrientation() -> String! {
-        let device = UIDevice.current
-        if device.isGeneratingDeviceOrientationNotifications {
-            device.beginGeneratingDeviceOrientationNotifications()
-            var deviceOrientation: String
-            let deviceOrientationRaw = device.orientation.rawValue
-            switch deviceOrientationRaw {
-            case 1:
-                deviceOrientation = "Portrait"
-            case 2:
-                deviceOrientation = "Upside Down"
-            case 3:
-                deviceOrientation = "Landscape Right"
-            case 4:
-                deviceOrientation = "Landscape Left"
-            case 5:
-                deviceOrientation = "Camera Facing Down"
-            case 6:
-                deviceOrientation = "Camera Facing Up"
-            default:
-                deviceOrientation = "Unknown"
-            }
-            return deviceOrientation
-        } else {
-            return nil
-        }
-    }
-    
     var body: some View {
         
         let selectedYear = selectedValueForYear == "전체" ? "2" : selectedValueForYear
@@ -308,9 +260,9 @@ struct QuestionView: View {
                         
                         
                         if examOrResult {
-                            TakeExamView(allQuestions: problemSet, examOrResult: $examOrResult, visibility: $visibility, presentInspector: $presentInspector)
+                            TakeExamView(allQuestions: problemSet, examOrResult: $examOrResult)
                         } else {
-                            TakeResultView(allQuestions: problemSet, stared: $stared)
+                            TakeResultView(allQuestions: problemSet)
                         }
                     }, label: {
                         Image(systemName: "play.rectangle")
@@ -617,7 +569,7 @@ struct QuestionView: View {
         }
         .navigationDestination(for: Question.self) { question in
             if examOrResult {
-                DetailView(question: question, stared: $stared, presentInspector: $presentInspector)
+                DetailView(question: question, presentInspector: $presentInspector)
             } else {
                 List { ResultView(question: question, stared: $stared, sequenceOfProblem: 1) }
             }

@@ -7,7 +7,6 @@ struct IndividualExamView: View, Equatable {
     @State var selectedRows = Set<Q.ID>()
     /// 제출할 때마다 늘려 진동·아이콘 효과를 준다.
     @State private var submitCount = 0
-    @Binding var presentInspector: Bool
     var sequenceOfProblem: Int = 0
     @State private var answerBranch: [Q] = []
 

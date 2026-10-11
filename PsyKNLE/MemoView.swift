@@ -2,8 +2,7 @@ import SwiftUI
 
 
 struct MemoView: View {
-    
- @State private var showPopoverMemo: Bool = false
+
     @State private var memoText: String = ""
     @Binding var question: Question
     @Environment(\.dismiss) var dismiss

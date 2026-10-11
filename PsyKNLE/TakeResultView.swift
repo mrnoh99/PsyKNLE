@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct TakeResultView: View {
-    @ObservationIgnored var allQuestions: [Question] = []
-    @Binding var stared: Bool
+    var allQuestions: [Question] = []
 
     var body: some View {
         VStack {
@@ -10,7 +9,7 @@ struct TakeResultView: View {
 
             List(allQuestions) { question in
                 if let i = allQuestions.firstIndex(of: question) {
-                    ResultView(question: question, stared: $stared, sequenceOfProblem: i + 1)
+                    ResultView(question: question, sequenceOfProblem: i + 1)
                 }
             }
             .scrollIndicators(.hidden)

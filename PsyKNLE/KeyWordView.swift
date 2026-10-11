@@ -2,8 +2,7 @@ import SwiftUI
 
 
 struct KeyWordView: View {
-    
-    @State private var showPopoverKeyWord: Bool = false
+
     @State private var keyWord: String = ""
     @Binding var question: Question
     @Environment(\.dismiss) var dismiss

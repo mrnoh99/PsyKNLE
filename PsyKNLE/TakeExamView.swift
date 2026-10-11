@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct TakeExamView: View {
-    @ObservationIgnored var allQuestions: [Question] = []
+    var allQuestions: [Question] = []
     @Binding var examOrResult: Bool
-    @Binding var visibility: NavigationSplitViewVisibility
-    @Binding var presentInspector: Bool
 
     var body: some View {
         VStack {
@@ -14,7 +12,6 @@ struct TakeExamView: View {
                     .padding(.top, 5)
                 Button(action: {
                     examOrResult = false
-                    visibility = .detailOnly
                 }, label: {
                     Image(systemName: "mail").symbolRenderingMode(.multicolor)
                     HStack { Text("정답확인") }
@@ -28,7 +25,6 @@ struct TakeExamView: View {
                 if let i = allQuestions.firstIndex(of: question) {
                     IndividualExamView(
                         question: question,
-                        presentInspector: $presentInspector,
                         sequenceOfProblem: i + 1
                     )
                 }

@@ -13,8 +13,6 @@ import SwiftData
 
 struct ResultView: View {
     @State   var question: Question //변경 불가
-    //  @State   var memoText: String
-    @Binding var stared: Bool
     var sequenceOfProblem : Int
     
     @State private var showPopoverMemo: Bool = false
@@ -135,7 +133,7 @@ struct ResultView: View {
                     .multilineTextAlignment(.leading)
                     .lineSpacing(10)
                 
-                ForEach(Array(question.subject.enumerated()), id: \.element) { index, element in
+                ForEach(Array(question.subject.enumerated()), id: \.offset) { index, element in
                     
                     if UIDevice.current.userInterfaceIdiom == .pad {
                         HStack {
@@ -179,7 +177,6 @@ struct ResultView: View {
                     
                     
                 })   .buttonStyle(.borderedProminent)
-                    .symbolEffect(.disappear, isActive: isMemoEmpty)
                     .springLoadingBehavior(.enabled)
                     .sensoryFeedback(
                         .impact(weight: .heavy, intensity: 0.9), trigger: showPopoverKeyWord )
@@ -238,6 +235,7 @@ struct ResultView: View {
                 .sheet(item: $shownGuide) { guide in
                     TopicGuideView(topic: question.topic, guide: guide)
                         .environment(\.openQuestionIDs, openIDs)
+                        .environment(\.openGuideIDs, openGuideIDs.union([guide.id]))
                 }
             }
             if question.memo.trimmingCharacters(in: .whitespaces).isEmpty {

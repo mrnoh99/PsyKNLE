@@ -6404,12 +6404,22 @@ let appContainer: ModelContainer = {
         try QuestionSeedSync.merge(into: context, seeds: items)
         return container
     } catch {
-        fatalError("Failed to create ModelContainer: \(error)")
+        // 스토어가 손상된 경우 인메모리 컨테이너로 대체해 앱을 살린다.
+        return try! ModelContainer(for: Question.self,
+                                   configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     }
 }()
 
 @main
 struct PsyKNLEApp: App {
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = .blue
+        UISegmentedControl.appearance().setTitleTextAttributes([.font: UIFont.preferredFont(forTextStyle: .body)], for: .highlighted)
+        UISegmentedControl.appearance().setTitleTextAttributes([.font: UIFont.preferredFont(forTextStyle: .body)], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.yellow], for: .highlighted)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.yellow], for: .selected)
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

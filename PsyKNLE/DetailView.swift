@@ -6,7 +6,6 @@ struct DetailView: View {
     @State private var showQuestions: EditMode = .active
     @State var showDetails = false
     @State var selectedRows = Set<Q.ID>()
-    @Binding var stared: Bool
     @Binding var presentInspector: Bool
 
     @Environment(\.modelContext) var dbContext
@@ -36,18 +35,15 @@ struct DetailView: View {
             }
             .multilineTextAlignment(.leading)
             .lineSpacing(10)
-            .navigationDestination(isPresented: $showDetails) {
-                List { ResultView(question: question, stared: $stared, sequenceOfProblem: 1) }
-            }
             .background(.background.secondary, in: .rect(cornerRadius: 20))
+        }
+        .navigationDestination(isPresented: $showDetails) {
+            List { ResultView(question: question, sequenceOfProblem: 1) }
         }
         .onAppear {
             presentInspector = false
-            stared = question.stared
             // 예전 버전에서 여러 개를 골라 둔 기록이 있어도 하나만 표시한다.
-            if let first = question.choice.first {
-                selectedRows = [first]
-            }
+            selectedRows = Set(question.choice.prefix(1))
         }
         .navigationTitle("문제")
         .toolbar {
