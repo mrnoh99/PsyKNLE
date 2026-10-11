@@ -329,7 +329,6 @@ struct ResultView: View {
 /// 답안 화면에서 [다시 풀기]를 누르면 문제 화면으로 바꿔 답을 다시 고를 수 있다.
 struct LinkedQuestionView: View {
     let question: Question
-    @State private var stared: Bool = false
     /// 처음 열 때 한 번만 정한다. choice로 바로 고르면, 문제 화면에서 제출하는 순간 choice가 채워져
     /// 문제 화면이 답안 화면으로 바뀌면서 답안으로 넘어가던 이동이 끊긴다.
     @State private var retrying: Bool
@@ -344,9 +343,9 @@ struct LinkedQuestionView: View {
         NavigationStack {
             Group {
                 if retrying {
-                    DetailView(question: question, stared: $stared, presentInspector: .constant(false))
+                    DetailView(question: question, presentInspector: .constant(false))
                 } else {
-                    List { ResultView(question: question, stared: $stared, sequenceOfProblem: 1) }
+                    List { ResultView(question: question, sequenceOfProblem: 1) }
                         .navigationTitle("답안")
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {
@@ -362,7 +361,6 @@ struct LinkedQuestionView: View {
                 }
             }
         }
-        .onAppear { stared = question.stared }
         .presentationSizing(.page)
     }
 }
